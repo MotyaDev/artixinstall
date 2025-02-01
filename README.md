@@ -1,4 +1,4 @@
-# Artix Linux Install Script
+# artixinstall
 ## Usage
 ```
 curl -sLO freaks.dev/ArtixInstaller.sh && sudo bash ArtixInstaller.sh
