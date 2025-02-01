@@ -16,11 +16,12 @@ title() {
     echo -ne "${cyan}
 ################################################################################
 #                                                                              #
-#   This is Automated Artix Linux Installer for both UEFI and Legacy System    #
+#                               ArtixInstall                                   #
 #                                                                              #
-#                                    By                                        #
 #                                                                              #
-#                               Hein Oke Soe                                   #
+#                               By motyadev                                    #
+#                                                                              #
+#                        Special thanks: heinokesoe                            #
 #                                                                              #
 ################################################################################
 ${normal}
@@ -35,6 +36,7 @@ start_install() {
         echo
         check_password root_password ${password} ${password_1}
         [[ $? -eq 0 ]] && break
+        clear
     done
 
     read -rp "Enter username: " username
@@ -47,10 +49,12 @@ start_install() {
         echo
         check_password user_password ${password} ${password_1}
         [[ $? -eq 0 ]] && break
+        clear
     done
 
     read -rp "Enter hostname: " hostname
     export hostname
+    clear
 
     choose_disk
 
@@ -89,6 +93,7 @@ start_install() {
         done
         export encrypt_root="yes";;
     esac
+    clear
 
     echo -e "\nWhich init system do you want to use?"
     options=("dinit" "openrc" "runit" "s6")
@@ -115,6 +120,7 @@ start_install() {
     export target_mount_point="/mnt"
 
     confirm
+    clear
 }
 
 choose_disk() {
@@ -123,6 +129,7 @@ choose_disk() {
     select_option $? 1 "${options[@]}"
     export chosen_disk=${options[$?]}
     export target_device=${chosen_disk%(*}
+    clear
 }
 
 part_disk() {
@@ -196,6 +203,8 @@ setup_disk() {
     run_step "Mounting Partitions\t\t" "mount_disk"
 }
 
+clear
+
 confirm() {
     echo -e "Artix Linux is going to be installed on ${chosen_disk}. Do you want to continue?"
     options=("Yes" "No")
@@ -204,6 +213,7 @@ confirm() {
     0) setup_disk;;
     1) exit;;
     esac
+    clear
 }
 
 install_base_system() {
@@ -337,7 +347,9 @@ clean() {
 finish() {
     echo -ne "${cyan}
 --------------------------------------------------------------------------------
-        Installation is done. Please Eject Installation Media and Reboot
+        Installation is done. Thanks for installing.
+        You can reboot now.
+        Goodbye! :)
 --------------------------------------------------------------------------------
 ${normal}
 "
@@ -529,23 +541,23 @@ export -f enable_zram
 export -f configure_mkinitcpio
 export -f install_gpu_drivers
 start_install
-run_step "Installing Base System\t\t" "install_base_system"
+run_step "Installing base system\t\t" "install_base_system"
 artix-chroot "$target_mount_point" bash << '_exit'
 install_log="$(mktemp -p /opt -t install_logXXX)"
-run_step "Configuring Time\t\t" "config_time"
-run_step "Configuring Language\t\t" "config_lang"
-run_step "Configuring Network\t\t" "config_network"
-run_step "Creating User Account\t\t" "create_user"
-run_step "Adding Universe Repo\t\t" "add_universe_repo"
-[[ -n ${arch_repo} ]] && run_step "Adding Arch Repo\t\t" "add_arch_repo" || true
-run_step "Setting up Bootloader\t\t" "setup_bootloader"
-run_step "Installing Microcode\t\t" "install_microcode"
+run_step "Configuring time\t\t" "config_time"
+run_step "Configuring language\t\t" "config_lang"
+run_step "Configuring network\t\t" "config_network"
+run_step "Creating user account\t\t" "create_user"
+run_step "Adding universe repo\t\t" "add_universe_repo"
+[[ -n ${arch_repo} ]] && run_step "Adding Arch repo\t\t" "add_arch_repo" || true
+run_step "Setting up bootloader\t\t" "setup_bootloader"
+run_step "Installing microcode\t\t" "install_microcode"
 [[ -n ${encrypt_root} || "${filesystem}" == "btrfs" ]] && run_step "Configuring mkinitcpio\t\t" "configure_mkinitcpio" || true
 [[ -n ${use_zram} ]] && run_step "Enabling zram\t\t\t" "enable_zram" || true
-run_step "Installing GPU Drivers\t\t" "install_gpu_drivers"
+run_step "Installing GPU drivers\t\t" "install_gpu_drivers"
 _exit
 if [[ $? -eq 0 ]]; then
-    run_step "Cleaning After Install\t\t" "clean"
+    run_step "Cleaning after install\t\t" "clean"
     finish
     exit 0
 else
