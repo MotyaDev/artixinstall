@@ -1,12 +1,12 @@
 # artixinstall
 ## Usage
 ```
-curl -sLO freaks.dev/ArtixInstaller.sh && sudo bash ArtixInstaller.sh
+git clone https://github.com/MotyaDev/artixinstall && cd artixinstall && sudo bash artixinstall.sh
 ```
 (OR)
 ```
-curl -sLO https://raw.githubusercontent.com/heinokesoe/ArtixInstaller/main/ArtixInstaller.sh
-sudo bash ArtixInstaller.sh
+curl -sLO https://raw.githubusercontent.com/MotyaDev/artixinstall/main/artixinstall.sh
+sudo bash artixinstall.sh
 ```
 The script will ask you
 - root password
