@@ -263,7 +263,7 @@ create_user() {
 
 add_universe_repo() {
     log "$1"
-    sed -i "s/^#ParallelDownloads.*$/ParallelDownloads = 4/" /etc/pacman.conf
+    sed -i "s/^#ParallelDownloads.*$/ParallelDownloads = 30/" /etc/pacman.conf
     echo -e '\n[universe]\nServer = https://universe.artixlinux.org/$arch' >> /etc/pacman.conf
     pacman -Syy
 }
