@@ -408,6 +408,24 @@ run_step() {
     fi
 }
 
+install_de() {
+    echo -e "\nWhich DE do you want to use?"
+    options=("gnome" "plasma" "cinnamon" "mate" "exit")
+    select_option $? 1 "${options[@]}"
+    case $? in
+    0) export de="gnome"
+        export zaglushka=("zaglushka" "zaglushka-zaglushka");;
+    1) export de="plasma"
+        export zaglushka=("openrc" "zaglushka-zaglushka");;
+    2) export de="cinnamon"
+        export zaglushka=("zaglushka" "zaglushka-zaglushka");;
+    3) export de="mate"
+        export zaglushka=("zaglushka-zaglushka" "zaglushka-zaglushka");;
+    4) echo "OK"
+        exit 1;;
+    esac
+}
+
 select_option() {
     # little helpers for terminal print control and key input
     ESC=$( printf "\033")
